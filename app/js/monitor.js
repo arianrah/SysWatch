@@ -1,10 +1,19 @@
 const path = require('path')
+const { ipcRenderer } = require('electron')
 
 const osu = require('node-os-utils')
 const cpu = osu.cpu
 const mem = osu.mem
 const os = osu.os
 
+let cpuOverload
+let alertFrequency
+
+// get settings, values
+ipcRenderer.on('settings:get', (e, settings) => {
+  cpuOverload = +settings.cpuOverload,
+  alertFrequency = +settings.alertFrequency
+})
 // static info
 // get cpu model
 document.getElementById('cpu-model').innerText = cpu.model()
@@ -19,10 +28,6 @@ document.getElementById('os').innerText = `${os.type()} ${os.arch()}`
 mem.info().then(info => {
   document.getElementById('mem-total').innerText = info.totalMemMb
 })
-
-let cpuOverload = 6
-let alertFrequency = 1
-
 
 // refresh every 2 seconds
 setInterval(() => {
