@@ -11,7 +11,7 @@ let mainWindow
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
-    title: 'APP NAME',
+    title: 'SysWatch',
     width: isDev ? 800 : 500,
     height: 600,
     icon: './assets/icons/icon.png',
