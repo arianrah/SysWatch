@@ -20,6 +20,7 @@ mem.info().then(info => {
   document.getElementById('mem-total').innerText = info.totalMemMb
 })
 
+let cpuOverload = 80
 
 // refresh every 2 seconds
 setInterval(() => {
@@ -27,6 +28,15 @@ setInterval(() => {
   // cpu usage
   cpu.usage().then(info => {
     document.getElementById('cpu-usage').innerText = info + '%'
+
+    document.getElementById('cpu-progress').style.width = info + '%'
+
+    // progress red if overload
+    if(info > cpuOverload) {
+      document.getElementById('cpu-progress').style.background = 'red'
+    } else {
+      document.getElementById('cpu-progress').style.background = '#30c88b'
+    }
   })
 
   // cpu free
