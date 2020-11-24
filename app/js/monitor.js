@@ -20,7 +20,9 @@ mem.info().then(info => {
   document.getElementById('mem-total').innerText = info.totalMemMb
 })
 
-let cpuOverload = 80
+let cpuOverload = 6
+let alertFrequency = 1
+
 
 // refresh every 2 seconds
 setInterval(() => {
@@ -32,10 +34,20 @@ setInterval(() => {
     document.getElementById('cpu-progress').style.width = info + '%'
 
     // progress red if overload
-    if(info > cpuOverload) {
+    if(info >= cpuOverload){
       document.getElementById('cpu-progress').style.background = 'red'
     } else {
       document.getElementById('cpu-progress').style.background = '#30c88b'
+    }
+
+    if(info >= cpuOverload && runNotify(alertFrequency)){
+      notifyUser({
+        title: 'CPU Overload',
+        body: `CPU is above ${cpuOverload}% usage.`,
+        icon: path.join(__dirname, 'img', 'icon.png')
+      })
+
+      localStorage.setItem('lastNotify', +new Date())
     }
   })
 
@@ -48,6 +60,30 @@ setInterval(() => {
   document.getElementById('sys-uptime').innerText = secondsToDhms(os.uptime())
 
 }, 2222)
+
+// notification handler
+function notifyUser(options) {
+  new Notification(options.title, options)
+}
+
+// check last notification ran
+function runNotify(frequency) {
+  if(localStorage.getItem('lastNotify') === null){
+    // if null store timestamp
+    localStorage.setItem('lastNotify', +new Date)
+    return true
+  }
+  const notifyTime = new Date(parseInt(localStorage.getItem('lastNotify')))
+  const now = new Date()
+  const diffTime = Math.abs(now - notifyTime)
+  const minutesPassed = Math.ceil(diffTime/(1000*60))
+
+  if(minutesPassed > frequency) {
+    return true
+  } else {
+    return false
+  }
+}
 
 function secondsToDhms(secs) {
   secs = +secs
