@@ -1,0 +1,24 @@
+{
+  "name": "system-watch",
+  "productName": "SysWatch",
+  "version": "1.0.0",
+  "description": "Watch CPU usage with notifications if usage above threshold.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon --exec electron ."
+  },
+  "keywords": [
+    "Electron"
+  ],
+  "author": "Arian Rahimi",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^11.0.2",
+    "electron-packager": "^15.1.0",
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "electron-log": "^4.3.0"
+  }
+}
