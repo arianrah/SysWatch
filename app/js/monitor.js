@@ -5,7 +5,7 @@ const cpu = osu.cpu
 const mem = osu.mem
 const os = osu.os
 
-
+// static info
 // get cpu model
 document.getElementById('cpu-model').innerText = cpu.model()
 
@@ -19,3 +19,31 @@ document.getElementById('os').innerText = `${os.type()} ${os.arch()}`
 mem.info().then(info => {
   document.getElementById('mem-total').innerText = info.totalMemMb
 })
+
+
+// refresh every 2 seconds
+setInterval(() => {
+
+  // cpu usage
+  cpu.usage().then(info => {
+    document.getElementById('cpu-usage').innerText = info + '%'
+  })
+
+  // cpu free
+  cpu.free().then(info => {
+    document.getElementById('cpu-free').innerText = info + '%'
+  })
+
+  // uptime
+  document.getElementById('sys-uptime').innerText = secondsToDhms(os.uptime())
+
+}, 2222)
+
+function secondsToDhms(secs) {
+  secs = +secs
+  const d = Math.floor(secs/(3600*24))
+  const h = Math.floor((secs%(3600*24))/3600)
+  const m = Math.floor((secs%3600)/60)
+  const s = Math.floor(secs%60)
+  return `${d}d, ${h}h, ${m}m, ${s}s`
+}
