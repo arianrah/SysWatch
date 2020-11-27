@@ -72,6 +72,7 @@
 
 				const cpuOverload = document.getElementById('cpu-overload').value
 				const alertFrequency = document.getElementById('alert-frequency').value
+				const nav = document.getElementById('nav')
 
 				// send off
 				ipcRenderer.send('settings:set', {
@@ -96,6 +97,10 @@
 			ipcRenderer.on('settings:get', (e, settings) => {
 				document.getElementById('cpu-overload').value = settings.cpuOverload
 				document.getElementById('alert-frequency').value = settings.alertFrequency
+			})
+
+			ipcRenderer.on('nav:toggle', () => {
+				nav.classList.toggle('hide')
 			})
 		</script>
 	</body>
