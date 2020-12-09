@@ -3,6 +3,8 @@ const log = require('electron-log')
 const path = require('path')
 const Store = require('./Store')
 
+const MainWindow = require('./MainWindow')
+
 // Set env
 process.env.NODE_ENV = 'development'
 
@@ -24,24 +26,7 @@ const store = new Store({
 });
 
 function createMainWindow() {
-  mainWindow = new BrowserWindow({
-    title: 'SysWatch',
-    width: isDev ? 800 : 355,
-    height: 520,
-    icon: './assets/icons/icon.png',
-    resizable: isDev ? true : false,
-    show: false,
-    opacity: 0.9,
-    webPreferences: {
-      nodeIntegration: true,
-    },
-  })
-
-  if (isDev) {
-    mainWindow.webContents.openDevTools()
-  }
-
-  mainWindow.loadFile('./app/index.html')
+  mainWindow = new MainWindow('./app/index.html', isDev)
 };
 
 app.on('ready', () => {
@@ -64,6 +49,7 @@ app.on('ready', () => {
   const icon = path.join(__dirname, 'assets', 'icons', 'tray_icon.png')
   // create tray
   tray = new Tray(icon)
+  tray.setToolTip('SysWatch')
   tray.on('click', () => {
     if(mainWindow.isVisible() === true) {
       mainWindow.hide()
